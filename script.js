@@ -141,3 +141,41 @@ function updateHighScore() {
 }
 
 initGame();
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener("touchstart", (e) => {
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+});
+
+document.addEventListener("touchend", (e) => {
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 30) {
+      if (moveRight()) afterMove();
+    } else if (dx < -30) {
+      if (moveLeft()) afterMove();
+    }
+  } else {
+    if (dy > 30) {
+      if (moveDown()) afterMove();
+    } else if (dy < -30) {
+      if (moveUp()) afterMove();
+    }
+  }
+});
+
+function afterMove() {
+  addRandomTile();
+  drawGrid();
+  checkWin();
+  if (isGameOver()) setTimeout(() => alert("💀 Game Over!"), 100);
+}
+
+
